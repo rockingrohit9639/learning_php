@@ -1,5 +1,12 @@
 <?php
 
+if (!isset($_SESSION)) { session_start(); }
+
+$loggin = false;
+if (isset($_SESSION['loggedin']) || $_SESSION == true) {
+  $loggin = true;
+}
+
 echo '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 <div class="container-fluid">
     <a class="navbar-brand" href="/rohit/onlineforum/"><h3>iDiscuss</h3></a>
@@ -36,9 +43,16 @@ echo '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <button class="btn btn-success" type="submit">Search</button>
         </form>
         <div class="mx-2">
-            <button class="btn btn-outline-primary ml-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signupModal">SignUp</button>
-        </div>
+            ';
+            if($loggin){
+                echo '<button class="btn btn-outline-primary ml-2" data-bs-toggle="modal" data-bs-target="#loginModal">Logout</button>';
+            }
+            else{
+            echo '<button class="btn btn-outline-primary ml-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signupModal">SignUp</button>';
+            }
+
+        echo '</div>
     </div>
 </div>
 </nav>';
@@ -54,7 +68,20 @@ if(isset($_GET["signupsuccess"]) && $_GET["signupsuccess"]=="true"){
 }
 elseif(isset($_GET["signupsuccess"]) && $_GET["signupsuccess"]=="false"){
     echo   '<div class="alert alert-danger alert-dismissible fade show my-0" role="alert">
-                <strong>Success !!</strong> '. $_GET["error"] .'
+                <strong>Ooops !!</strong> '. $_GET["error"] .'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+}
+
+if(isset($_GET["login"]) && $_GET["login"]=="true"){
+    echo   '<div class="alert alert-success alert-dismissible fade show my-0" role="alert">
+                <strong>Success !!</strong> You are now logged in.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+}
+elseif(isset($_GET["login"]) && $_GET["login"]=="false"){
+    echo   '<div class="alert alert-danger alert-dismissible fade show my-0" role="alert">
+                <strong>Ooops !!</strong> '. $_GET["error"] .'
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>';
 }
