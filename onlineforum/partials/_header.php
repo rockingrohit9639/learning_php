@@ -45,7 +45,11 @@ echo '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="mx-2">
             ';
             if($loggin){
-                echo '<button class="btn btn-outline-primary ml-2" data-bs-toggle="modal" data-bs-target="#loginModal">Logout</button>';
+                echo '
+                <div class="d-flex align-items-center text-white" style="gap: 0.5rem;">
+                <p class="m-0">Welcome <strong>'. $_SESSION["username"] .'</strong></p>
+                <a href="/rohit/onlineforum/partials/handleLogout.php" class="btn btn-outline-primary">Logout</a>
+                </div>';
             }
             else{
             echo '<button class="btn btn-outline-primary ml-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>

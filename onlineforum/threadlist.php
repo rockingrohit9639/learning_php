@@ -72,7 +72,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <hr class="my-4">
     </div>
 
-    <div class="container mt-3">
+    <?php
+
+    if()
+    echo '<div class="container mt-3">
         <h3 class="mb-3">Start a discussion</h3>
         <form action="/rohit/onlineforum/threadlist.php?category=<?php echo "$category"; ?>" method="POST">
             <input type="hidden" name="userId" value="0">
@@ -86,7 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
-    </div>
+    </div>';
+    ?>
 
     <div class="container" style="min-height: 600px;">
         <h3 class="my-5">Browse Questions</h3>
