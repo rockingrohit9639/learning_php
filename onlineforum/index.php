@@ -53,11 +53,11 @@
             while ($row = mysqli_fetch_assoc($all_cat)) {
                 echo '<div class="col-md-4 mb-3">
                             <div class="card" style="width: 18rem;">
-                                <img src="http://source.unsplash.com/500x400/?python,coding" class="card-img-top" alt="...">
+                                <img src="http://source.unsplash.com/500x400/?'. $row["category_name"] .',coding,code" class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <h5 class="card-title">' . $row["category_name"] . '</h5>
-                                    <p class="card-text">' . $row["category_desc"] . '</p>
-                                    <a href="#" class="btn btn-primary">View Threads</a>
+                                    <h5 class="card-title"> <a class="nav-link" href="/rohit/onlineforum/threadlist.php?category='. $row["category_id"] .'">' . $row["category_name"] . '</a></h5>
+                                    <p class="card-text">' . substr($row["category_desc"], 0, 50) . '...</p>
+                                    <a href="/rohit/onlineforum/threadlist.php?category='. $row["category_id"] .'" class="btn btn-primary">View Threads</a>
                                 </div>
                             </div>
                         </div>';
