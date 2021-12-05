@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         session_start();
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $username;
+        $_SESSION['userid'] = $row["user_id"];
         header("location: /rohit/onlineforum/index.php?login=true");
       }
       else {

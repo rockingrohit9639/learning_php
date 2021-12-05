@@ -7,7 +7,8 @@ $success = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $comment = $_POST["comment"];
     $threadId = $_GET["threadid"];
-    $commentSql = "INSERT INTO `comments`(`comment_content`, `thread_id`, `comment_time`) VALUES ('$comment','$threadId',current_timestamp())";
+    $userId = $_POST["userId"];
+    $commentSql = "INSERT INTO `comments`(`comment_content`, `thread_id`, `user_id` , `comment_time`) VALUES ('$comment','$threadId', '$userId' ,current_timestamp())";
     $res = mysqli_query($conn, $commentSql);
 
     if (!$res) {
@@ -67,18 +68,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p class="lead"><?php echo $thread_desc; ?></p>
     </div>
 
-    <div class="container mt-5">
+    <?php
+
+    if(isset($_SESSION['loggedin']) || $_SESSION == true){
+    echo '<div class="container mt-5">
         <h1>Post a comment</h1>
 
-        <form action="/rohit/onlineforum/thread.php?threadid=<?php echo "$thread_id"; ?>" method="POST">
-            <input type="hidden" name="userId" value="0">
+        <form action="/rohit/onlineforum/thread.php?threadid='.$thread_id.'" method="POST">
             <div class="mb-3">
+                <input type="hidden" name="userId" value="'. $_SESSION["userid"] .'">
                 <label for="threadDesc" class="form-label">Type your comment</label>
                 <textarea class="form-control" requried id="comment" name="comment" rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-success">Post</button>
         </form>
-    </div>
+    </div>';
+    }
+    else {
+        echo "
+        <div class='container'>
+        <h3 class='mb-3'>Post a comment</h3>
+        Please login to start a discussion.
+        </div>";
+    }
+    ?>
 
     <div class="container mt-5">
         <h1>Discussion</h1>
@@ -91,13 +104,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $no_result = true;
         while ($row = mysqli_fetch_assoc($allComments)) {
             $no_result = false;
+            $userSql = 'SELECT username FROM users WHERE user_id = '. $row["user_id"] .'';
+            $userRes = mysqli_query($conn, $userSql);
+            $user = mysqli_fetch_assoc($userRes);
+            $uname = $user["username"];
+
             echo '<div class="d-flex my-4">
                     <div class="flex-shrink-0">
                         <img src="http://source.unsplash.com/50x40/?user" class="rounded" alt="user">
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <div class="d-flex">
-                            <h5>Anonymour User </h5>
+                            <h5>'. $uname .'</h5>
                             <p class="text-muted">'. $row["comment_time"] .'</p>
                         </div>
                         ' . $row["comment_content"] . '

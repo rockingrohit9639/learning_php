@@ -74,11 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php
 
-    if()
+    if(isset($_SESSION['loggedin']) || $_SESSION == true){
     echo '<div class="container mt-3">
         <h3 class="mb-3">Start a discussion</h3>
-        <form action="/rohit/onlineforum/threadlist.php?category=<?php echo "$category"; ?>" method="POST">
-            <input type="hidden" name="userId" value="0">
+        <form action="/rohit/onlineforum/threadlist.php?category='.$category.'" method="POST">
+            <input type="hidden" name="userId" value="'. $_SESSION["userid"] .'">
             <div class="mb-3">
                 <label for="threadTitle" class="form-label">Problem Title</label>
                 <input type="text" class="form-control" id="threadTitle" name="threadTitle" required>
@@ -90,6 +90,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>';
+    }
+    else {
+        echo "
+        <div class='container'>
+        <h3 class='mb-3'>Start a discussion</h3>
+        Please login to start a discussion.
+        </div>";
+    }
     ?>
 
     <div class="container" style="min-height: 600px;">
@@ -102,12 +110,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $no_result = true;
         while ($row = mysqli_fetch_assoc($threads)) {
             $no_result = false;
+            $userSql = 'SELECT username FROM users WHERE user_id = '. $row["thread_user_id"] .'';
+            $userRes = mysqli_query($conn, $userSql);
+            $user = mysqli_fetch_assoc($userRes);
+            $uname = $user["username"];
+
             echo '<div class="d-flex my-4">
                     <div class="flex-shrink-0">
                         <img src="http://source.unsplash.com/50x40/?user" class="rounded" alt="user">
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <p class="font-weight-bold mb-0">Anonymous User</p>
+                        <p class="text-bold mb-0">'. $uname .'</p>
                         <a href="/rohit/onlineforum/thread.php?threadid=' . $row["thread_id"] . '" class="text-dark"><h4>' . $row["thread_title"] . '</h4></a>
                         ' . $row["thread_desc"] . '
                     </div>
