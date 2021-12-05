@@ -103,6 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <img src="http://source.unsplash.com/50x40/?user" class="rounded" alt="user">
                     </div>
                     <div class="flex-grow-1 ms-3">
+                        <p class="font-weight-bold mb-0">Anonymous User</p>
                         <a href="/rohit/onlineforum/thread.php?threadid=' . $row["thread_id"] . '" class="text-dark"><h4>' . $row["thread_title"] . '</h4></a>
                         ' . $row["thread_desc"] . '
                     </div>
