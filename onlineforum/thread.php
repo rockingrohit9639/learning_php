@@ -1,3 +1,24 @@
+<?php
+
+include "./partials/_dbconnect.php";
+
+$error = false;
+$success = false;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $comment = $_POST["comment"];
+    $threadId = $_GET["threadid"];
+    $commentSql = "INSERT INTO `comments`(`comment_content`, `thread_id`, `comment_time`) VALUES ('$comment','$threadId',current_timestamp())";
+    $res = mysqli_query($conn, $commentSql);
+
+    if (!$res) {
+        $error = "Could not add your comment. Please try again.";
+    } else {
+        $success = "Comment added successfully.";
+    }
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -27,6 +48,18 @@
         header("location: index.php");
         exit;
     }
+
+    if ($error) {
+        echo   '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Ooops !!</strong> ' . $error . '
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+    } elseif ($success) {
+        echo   '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success !!</strong> ' . $success . '
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+    }
     ?>
 
     <div class="container mt-4">
@@ -35,8 +68,47 @@
     </div>
 
     <div class="container mt-5">
+        <h1>Post a comment</h1>
+
+        <form action="/rohit/onlineforum/thread.php?threadid=<?php echo "$thread_id"; ?>" method="POST">
+            <input type="hidden" name="userId" value="0">
+            <div class="mb-3">
+                <label for="threadDesc" class="form-label">Type your comment</label>
+                <textarea class="form-control" requried id="comment" name="comment" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Post</button>
+        </form>
+    </div>
+
+    <div class="container mt-5">
         <h1>Discussion</h1>
         <hr>
+
+        <?php
+        $threadId = $_GET["threadid"];
+        $comment_sql = "SELECT * FROM `comments` WHERE `thread_id` = '$threadId'";
+        $allComments = mysqli_query($conn, $comment_sql);
+        $no_result = true;
+        while ($row = mysqli_fetch_assoc($allComments)) {
+            $no_result = false;
+            echo '<div class="d-flex my-4">
+                    <div class="flex-shrink-0">
+                        <img src="http://source.unsplash.com/50x40/?user" class="rounded" alt="user">
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="d-flex">
+                            <h5>Anonymour User </h5>
+                            <p class="text-muted">'. $row["comment_time"] .'</p>
+                        </div>
+                        ' . $row["comment_content"] . '
+                    </div>
+                </div>';
+        }
+
+        if ($no_result) {
+            echo "<h6 class='text-muted'>Be the saviour of this man.</h6>";
+        }
+        ?>
     </div>
 
     <?php include "./partials/_footer.php"; ?>
