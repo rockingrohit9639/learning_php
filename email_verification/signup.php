@@ -4,6 +4,19 @@ include "./partials/_dbconnect.php";
 $message = "";
 $error = "";
 
+// include "./datamail.php";
+ini_set("smtp_port","25");
+$to_email = "rohitsaini.codes@gmail.com";
+$subject = "Simple Email Test via PHP";
+$body = "Hi, This is test email send by PHP Script";
+$headers = "From: rohitbhatwara1@gmail.com";
+
+if (mail($to_email, $subject, $body, $headers)) {
+    echo "Email successfully sent to $to_email...";
+} else {
+    echo "Email sending failed...";
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = $_POST["password"];
